@@ -21,6 +21,7 @@ model User {
 model Post {
   id       Int    @id @default(autoincrement())
   content  String
+  likes    Int    @default(0)
   author   User   @relation(fields: [authorID], references: [id])
   authorID Int
 }

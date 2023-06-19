@@ -1,12 +1,14 @@
+import Header from "@/components/header/Header"
+
 export const metadata = {
-	title: 'LoungeTalks - Home',
+	title: 'Linkship - Home',
 	description: 'LoungeTalks is a new social network'
 }
 
 export default function Home() {
 	return (
 		<>
-			<span>Hello world</span>
+			<Header />
 		</>
 	)
 }
