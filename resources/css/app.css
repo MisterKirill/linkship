@@ -1,0 +1,25 @@
+body {
+    margin: 0;
+    background-color: #151515;
+    color: white;
+    font-family: "Roboto", sans-serif;
+}
+
+button {
+    font-family: "Roboto", sans-serif;
+    background-color: transparent;
+    color: white;
+    font-weight: 600;
+    font-size: 0.9em;
+    border: none;
+    padding: 0.8rem 1rem;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: 0.1s background-color;
+}
+button:hover {
+    background-color: #272727;
+}
+button:active {
+    background-color: #303030;
+}
