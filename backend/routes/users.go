@@ -2,15 +2,141 @@ package routes
 
 import (
 	"encoding/json"
-	"fmt"
 	"linksh/backend/database"
 	"log"
 	"net/http"
+	"os"
 	"regexp"
+	"time"
 	"unicode/utf8"
 
+	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
+
+func UserRegister(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+
+	var body struct {
+		Username string
+		Password string
+	}
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	errorMessage, err := validateUsername(body.Username)
+	if err != nil {
+		log.Print(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	if errorMessage != "" {
+		w.WriteHeader(http.StatusUnprocessableEntity)
+		json.NewEncoder(w).Encode(map[string]any{
+			"message": errorMessage,
+		})
+		return
+	}
+
+	var username string
+	database.DB.QueryRow("SELECT username FROM users WHERE username = $1", body.Username).Scan(&username)
+	if username != "" {
+		w.WriteHeader(http.StatusConflict)
+		json.NewEncoder(w).Encode(map[string]any{
+			"message": "Username already taken",
+		})
+		return
+	}
+
+	password_hash, err := bcrypt.GenerateFromPassword([]byte(body.Password), bcrypt.DefaultCost)
+	if err != nil {
+		log.Print(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	var userId int
+	database.DB.QueryRow("INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id", body.Username, string(password_hash)).Scan(&userId)
+	
+	token, err := generateToken(userId)
+	if err != nil {
+		log.Print(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(map[string]any{
+		"token": token,
+	})
+}
+
+func UserLogin(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+
+	var body struct {
+		Username string
+		Password string
+	}
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	errorMessage, err := validateUsername(body.Username)
+	if err != nil {
+		log.Print(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	if errorMessage != "" {
+		w.WriteHeader(http.StatusUnprocessableEntity)
+		json.NewEncoder(w).Encode(map[string]any{
+			"message": errorMessage,
+		})
+		return
+	}
+
+	var user database.User
+	database.DB.QueryRow("SELECT id, username, password FROM users WHERE username = $1", body.Username).Scan(&user.Id, &user.Username, &user.Password)
+	if user.Username == "" {
+		w.WriteHeader(http.StatusUnauthorized)
+		json.NewEncoder(w).Encode(map[string]any{
+			"message": "Invalid username or password",
+		})
+		return
+	}
+
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password)); err != nil {
+		w.WriteHeader(http.StatusUnauthorized)
+		json.NewEncoder(w).Encode(map[string]any{
+			"message": "Invalid username or password",
+		})
+		return
+	}
+
+	token, err := generateToken(user.Id)
+	if err != nil {
+		log.Print(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	json.NewEncoder(w).Encode(map[string]any{
+		"token": token,
+	})
+}
 
 func validateUsername(username string) (string, error) {
 	usernameLength := utf8.RuneCountInString(username)
@@ -35,94 +161,16 @@ func validateUsername(username string) (string, error) {
 	return "", nil
 }
 
-func UserRegister(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		return
-	}
-
-	var body struct {
-		Username string
-		Password string
-	}
-	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	errorMessage, err := validateUsername(body.Username)
+func generateToken(userId int) (string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"sub": userId,
+		"iat": time.Now().Unix(),
+		"exp": time.Now().AddDate(0, 1, 0).Unix(),
+	})
+	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 	if err != nil {
-		log.Print(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
+		return "", err
 	}
 
-	if errorMessage != "" {
-		w.WriteHeader(http.StatusUnprocessableEntity)
-		fmt.Fprint(w, errorMessage)
-		return
-	}
-
-	var username string
-	database.DB.QueryRow("SELECT username FROM users WHERE username = $1", body.Username).Scan(&username)
-	if username != "" {
-		w.WriteHeader(http.StatusConflict)
-		fmt.Fprint(w, "Username already taken")
-		return
-	}
-
-	password_hash, err := bcrypt.GenerateFromPassword([]byte(body.Password), bcrypt.DefaultCost)
-	if err != nil {
-		log.Print(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	database.DB.Query("INSERT INTO users (username, password) VALUES ($1, $2)", body.Username, string(password_hash))
-	fmt.Fprint(w, "User successfully registered!")
-}
-
-func UserLogin(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		return
-	}
-
-	var body struct {
-		Username string
-		Password string
-	}
-	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	errorMessage, err := validateUsername(body.Username)
-	if err != nil {
-		log.Print(err)
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	if errorMessage != "" {
-		w.WriteHeader(http.StatusUnprocessableEntity)
-		fmt.Fprint(w, errorMessage)
-		return
-	}
-
-	var user database.User
-	database.DB.QueryRow("SELECT username, password FROM users WHERE username = $1", body.Username).Scan(&user.Username, &user.Password)
-	if user.Username == "" {
-		w.WriteHeader(http.StatusUnauthorized)
-		fmt.Fprint(w, "Invalid username or password")
-		return
-	}
-
-	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password)); err != nil {
-		w.WriteHeader(http.StatusUnauthorized)
-		fmt.Fprint(w, "Invalid username or password")
-		return
-	}
-
-	fmt.Fprint(w, "Successfully logged in!")
+	return tokenString, nil
 }
