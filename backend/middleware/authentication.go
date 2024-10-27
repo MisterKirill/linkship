@@ -1,0 +1,67 @@
+package middleware
+
+import (
+	"context"
+	"database/sql"
+	"fmt"
+	"linksh/backend/database"
+	"net/http"
+	"os"
+	"strings"
+
+	"github.com/golang-jwt/jwt/v5"
+)
+
+const ContextUser ContextKey = "user"
+
+func AuthenticationMiddleware(next http.HandlerFunc) http.HandlerFunc {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		tokenString := strings.TrimPrefix(r.Header.Get("Authorization"), "Bearer ")
+
+		if tokenString == "" {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+
+		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+				return nil, fmt.Errorf("unexpected signing method")
+			}
+
+			return []byte(os.Getenv("JWT_SECRET")), nil
+		})
+		if err != nil {
+			w.WriteHeader(http.StatusForbidden)
+			return
+		}
+
+		claims, ok := token.Claims.(jwt.MapClaims)
+		if !ok {
+			w.WriteHeader(http.StatusForbidden)
+			return
+		}
+
+		sub, err := claims.GetSubject()
+		if err != nil {
+			w.WriteHeader(http.StatusForbidden)
+			return
+		}
+
+		var user database.User
+		err = database.DB.QueryRow("SELECT * FROM users WHERE username = $1", sub).Scan(
+			&user.Id,
+			&user.Username,
+			&user.Password,
+			&user.DisplayName,
+			&user.Bio,
+		)
+		if err == sql.ErrNoRows {
+			w.WriteHeader(http.StatusForbidden)
+			return
+		}
+
+		ctx := context.WithValue(r.Context(), ContextUser, user)
+
+		next.ServeHTTP(w, r.WithContext(ctx))
+	})
+}

@@ -62,10 +62,9 @@ func UserRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var userId int
-	database.DB.QueryRow("INSERT INTO users (username, password) VALUES ($1, $2) RETURNING id", body.Username, string(password_hash)).Scan(&userId)
-	
-	token, err := generateToken(userId)
+	database.DB.Query("INSERT INTO users (username, password) VALUES ($1, $2)", body.Username, string(password_hash))
+
+	token, err := generateToken(body.Username)
 	if err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -109,8 +108,8 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var user database.User
-	database.DB.QueryRow("SELECT id, username, password FROM users WHERE username = $1", body.Username).Scan(&user.Id, &user.Username, &user.Password)
-	if user.Username == "" {
+	database.DB.QueryRow("SELECT password FROM users WHERE username = $1", body.Username).Scan(&user.Password)
+	if user.Password == "" {
 		w.WriteHeader(http.StatusUnauthorized)
 		json.NewEncoder(w).Encode(map[string]any{
 			"message": "Invalid username or password",
@@ -126,7 +125,7 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, err := generateToken(user.Id)
+	token, err := generateToken(body.Username)
 	if err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -161,9 +160,9 @@ func validateUsername(username string) (string, error) {
 	return "", nil
 }
 
-func generateToken(userId int) (string, error) {
+func generateToken(username string) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"sub": userId,
+		"sub": username,
 		"iat": time.Now().Unix(),
 		"exp": time.Now().AddDate(0, 1, 0).Unix(),
 	})
