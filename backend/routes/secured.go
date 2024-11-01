@@ -1,8 +1,8 @@
 package routes
 
 import (
-	"linksh/backend/database"
-	"linksh/backend/middleware"
+	"linkship/backend/database"
+	"linkship/backend/middleware"
 	"log"
 	"net/http"
 )

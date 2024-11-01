@@ -2,7 +2,7 @@ package routes
 
 import (
 	"encoding/json"
-	"linksh/backend/database"
+	"linkship/backend/database"
 	"log"
 	"net/http"
 	"os"

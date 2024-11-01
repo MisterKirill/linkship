@@ -1,4 +1,4 @@
-module linksh/backend
+module linkship/backend
 
 go 1.23.2
 

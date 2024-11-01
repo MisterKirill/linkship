@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"os"
 
-	"linksh/backend/database"
-	"linksh/backend/middleware"
-	"linksh/backend/routes"
+	"linkship/backend/database"
+	"linkship/backend/middleware"
+	"linkship/backend/routes"
 
 	"github.com/joho/godotenv"
 )

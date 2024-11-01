@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
-	"linksh/backend/database"
+	"linkship/backend/database"
 	"net/http"
 	"os"
 	"strings"
