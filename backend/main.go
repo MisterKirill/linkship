@@ -1,13 +1,11 @@
 package main
 
 import (
+	"linkship/backend/database"
+	"linkship/backend/routes"
 	"log"
 	"net/http"
 	"os"
-
-	"linkship/backend/database"
-	"linkship/backend/middleware"
-	"linkship/backend/routes"
 
 	"github.com/joho/godotenv"
 )
@@ -22,8 +20,7 @@ func main() {
 
 	http.HandleFunc("/users", routes.UserRegister)
 	http.HandleFunc("/users/login", routes.UserLogin)
-
-	http.HandleFunc("/secured", middleware.AuthenticationMiddleware(routes.SecuredRoute))
+	http.HandleFunc("/users/", routes.GetUser)
 
 	log.Println("Starting server...")
 	log.Fatal(http.ListenAndServe(os.Getenv("PORT"), nil))

@@ -1,16 +1,14 @@
 package routes
 
 import (
+	"database/sql"
 	"encoding/json"
 	"linkship/backend/database"
+	"linkship/backend/utils"
 	"log"
 	"net/http"
-	"os"
-	"regexp"
-	"time"
-	"unicode/utf8"
+	"strings"
 
-	"github.com/golang-jwt/jwt/v5"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -30,7 +28,7 @@ func UserRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	errorMessage, err := validateUsername(body.Username)
+	errorMessage, err := utils.ValidateUsername(body.Username)
 	if err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -64,7 +62,7 @@ func UserRegister(w http.ResponseWriter, r *http.Request) {
 
 	database.DB.Query("INSERT INTO users (username, password) VALUES ($1, $2)", body.Username, string(password_hash))
 
-	token, err := generateToken(body.Username)
+	token, err := utils.GenerateToken(body.Username)
 	if err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -92,7 +90,7 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	errorMessage, err := validateUsername(body.Username)
+	errorMessage, err := utils.ValidateUsername(body.Username)
 	if err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -107,9 +105,9 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var user database.User
-	database.DB.QueryRow("SELECT password FROM users WHERE username = $1", body.Username).Scan(&user.Password)
-	if user.Password == "" {
+	var user database.AuthenticationUser
+	err = database.DB.QueryRow("SELECT password FROM users WHERE username = $1", body.Username).Scan(&user.Password)
+	if err == sql.ErrNoRows {
 		w.WriteHeader(http.StatusUnauthorized)
 		json.NewEncoder(w).Encode(map[string]any{
 			"message": "Invalid username or password",
@@ -125,7 +123,7 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, err := generateToken(body.Username)
+	token, err := utils.GenerateToken(body.Username)
 	if err != nil {
 		log.Print(err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -137,39 +135,40 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func validateUsername(username string) (string, error) {
-	usernameLength := utf8.RuneCountInString(username)
-
-	if usernameLength < 3 {
-		return "Username is too short", nil
+func GetUser(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		return
 	}
+	w.Header().Set("Content-Type", "application/json")
 
-	if usernameLength > 40 {
-		return "Username is too long", nil
-	}
+	username := strings.TrimPrefix(r.URL.Path, "/users/")
 
-	usernameValid, err := regexp.Match("^[a-zA-Z0-9_]+$", []byte(username))
+	errorMessage, err := utils.ValidateUsername(username)
 	if err != nil {
-		return "", err
+		log.Print(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
-	if !usernameValid {
-		return "Username can contain only English letters, numbers and underscores", nil
+	if errorMessage != "" {
+		w.WriteHeader(http.StatusUnprocessableEntity)
+		json.NewEncoder(w).Encode(map[string]any{
+			"message": errorMessage,
+		})
+		return
 	}
 
-	return "", nil
-}
-
-func generateToken(username string) (string, error) {
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"sub": username,
-		"iat": time.Now().Unix(),
-		"exp": time.Now().AddDate(0, 1, 0).Unix(),
-	})
-	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
-	if err != nil {
-		return "", err
+	var user database.User
+	err = database.DB.QueryRow("SELECT username, display_name, bio FROM users WHERE username = $1", username).Scan(
+		&user.Username,
+		&user.DisplayName,
+		&user.Bio,
+	)
+	if err == sql.ErrNoRows {
+		w.WriteHeader(http.StatusNotFound)
+		return
 	}
 
-	return tokenString, nil
+	json.NewEncoder(w).Encode(user)
 }

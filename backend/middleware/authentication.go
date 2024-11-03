@@ -51,7 +51,6 @@ func AuthenticationMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		err = database.DB.QueryRow("SELECT * FROM users WHERE username = $1", sub).Scan(
 			&user.Id,
 			&user.Username,
-			&user.Password,
 			&user.DisplayName,
 			&user.Bio,
 		)
