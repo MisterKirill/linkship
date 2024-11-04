@@ -5,9 +5,9 @@ function App() {
   return (
     <BrowserRouter>
       <nav>
-        <Link href="/" className="logo">Linkship</Link>
+        <Link to="/" className="logo">Linkship</Link>
 
-        <Link href="/login" className="nav-link">Log In</Link>
+        <Link to="/login" className="nav-link">Log In</Link>
       </nav>
       <main>
         <Routes>
