@@ -4,16 +4,24 @@ import './App.css'
 function App() {
   return (
     <BrowserRouter>
-      <nav>
-        <Link to="/" className="logo">Linkship</Link>
+      <div className="wrapper">
+        <nav>
+          <Link to="/" className="logo">Linkship</Link>
 
-        <Link to="/login" className="nav-link">Log In</Link>
-      </nav>
-      <main>
-        <Routes>
+          <Link to="/login" className="nav-link">Log In</Link>
+        </nav>
 
-        </Routes>
-      </main>
+        <main>
+          <Routes>
+
+          </Routes>
+        </main>
+
+        <footer>
+          Made with ❤️ by <a href="https://github.com/MisterKirill" className="text-link">Mister Kirill</a>.<br />
+          Source code can be found on <a href="https://github.com/MisterKirill/linkship" className="text-link">GitHub</a>.
+        </footer>
+      </div>
     </BrowserRouter>
   )
 }
