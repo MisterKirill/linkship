@@ -4,3 +4,15 @@ body {
   color: white;
   margin: 0;
 }
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500;
+}
+
+.text-link {
+  color: #6EE7B7;
+  text-decoration: none;
+}
+.text-link:hover {
+  text-decoration: underline;
+}
