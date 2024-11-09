@@ -1,7 +1,7 @@
 import './App.css'
-import { BrowserRouter, Link, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Link, NavLink, Route, Routes } from 'react-router-dom'
 import Home from './pages/Home'
-import LogIn from './pages/Login'
+import LogIn from './pages/LogIn'
 import NotFound from './pages/NotFound'
 
 function App() {
@@ -11,7 +11,9 @@ function App() {
         <nav>
           <Link to="/" className="logo">Linkship</Link>
 
-          <Link to="/login" className="nav-link">Log In</Link>
+          <NavLink to="/login" className={({ isActive }) => isActive ? "nav-link nav-link-active" : "nav-link"}>
+            Log In
+          </NavLink>
         </nav>
 
         <main>
