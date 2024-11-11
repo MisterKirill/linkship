@@ -1,0 +1,28 @@
+.avatar {
+  border-radius: 100%;
+  width: 220px;
+  height: 220px;
+}
+
+.display-name {
+  margin: 0;
+}
+
+.bio {
+  width: 600px;
+}
+
+.link-buttons-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.credit-link {
+  margin-top: 48px;
+  color: #5D6B88;
+  text-decoration: none;
+}
+.credit-link:hover {
+  text-decoration: underline;
+}
