@@ -5,6 +5,7 @@ import NotFound from './pages/NotFound'
 import Profile from './pages/Profile'
 import ProfileLayout from './layouts/ProfileLayout'
 import MainLayout from './layouts/MainLayout'
+import Register from './pages/Register'
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<LogIn />} />
+          <Route path="/register" element={<Register />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>

@@ -4,19 +4,24 @@ import './style.css'
 function MainLayout() {
   return (
     <div className="wrapper">
-      <nav>
+      <nav className="nav">
         <Link to="/" className="logo">Linkship</Link>
 
-        <NavLink to="/login" className={({ isActive }) => isActive ? "nav-link nav-link-active" : "nav-link"}>
-          Log In
-        </NavLink>
+        <div className="nav-links">
+          <NavLink to="/Register" className={({ isActive }) => isActive ? "nav-link nav-link-active" : "nav-link"}>
+            Register
+          </NavLink>
+          <NavLink to="/login" className={({ isActive }) => isActive ? "nav-link nav-link-active" : "nav-link"}>
+            Log In
+          </NavLink>
+        </div>
       </nav>
 
       <main className="main-content">
         <Outlet />
       </main>
 
-      <footer>
+      <footer className="footer">
         Made with ❤️ by <a href="https://github.com/MisterKirill" className="text-link">Mister Kirill</a>.<br />
         Source code can be found on <a href="https://github.com/MisterKirill/linkship" className="text-link">GitHub</a>.
       </footer>

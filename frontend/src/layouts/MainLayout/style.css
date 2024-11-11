@@ -1,10 +1,16 @@
-nav {
+.nav {
   display: flex;
-  justify-content: space-between;
   padding: 20px 172px;
 }
 
-footer {
+.nav-links {
+  margin-left: auto;
+}
+.nav-link:first-child {
+  margin-right: 24px;
+}
+
+.footer {
   background-color: #1F2937;
   text-align: center;
   padding: 52px 0;
