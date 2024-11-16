@@ -1,14 +1,34 @@
 import { FormEvent, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 function Register() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const navigate = useNavigate()
 
-  const register = (e: FormEvent) => {
+  const register = async (e: FormEvent) => {
     e.preventDefault()
 
-    console.log(username, password)
+    const res = await fetch('http://localhost:8080/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        username,
+        password
+      })
+    })
+
+    const json = await res.json()
+    console.log(json)
+
+    if (res.status == 200) {
+      localStorage.setItem('token', json.token)
+      navigate('/')
+    } else {
+      alert(json.message)
+    }
   }
 
   return (
