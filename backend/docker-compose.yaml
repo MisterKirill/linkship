@@ -1,0 +1,24 @@
+name: linkship
+
+services:
+  backend:
+    build: .
+    restart: always
+    depends_on:
+      - database
+    env_file:
+      - .env
+    environment:
+      - PORT=:8080
+      - POSTGRES_URL=postgres://postgres:postgres@database/postgres?sslmode=disable
+    ports:
+      - "8080:8080"
+  
+  database:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./database.sql:/docker-entrypoint-initdb.d/database.sql
+      - ./postgres-data:/var/lib/postgresql/data
