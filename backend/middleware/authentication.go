@@ -12,9 +12,9 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-const ContextUser ContextKey = "user"
+const UserKey ContextKey = "user"
 
-func AuthenticationMiddleware(next http.HandlerFunc) http.HandlerFunc {
+func Authentication(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		tokenString := strings.TrimPrefix(r.Header.Get("Authorization"), "Bearer ")
 
@@ -48,8 +48,7 @@ func AuthenticationMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		}
 
 		var user database.User
-		err = database.DB.QueryRow("SELECT * FROM users WHERE username = $1", sub).Scan(
-			&user.Id,
+		err = database.DB.QueryRow("SELECT username, display_name, bio FROM users WHERE username = $1", sub).Scan(
 			&user.Username,
 			&user.DisplayName,
 			&user.Bio,
@@ -59,7 +58,7 @@ func AuthenticationMiddleware(next http.HandlerFunc) http.HandlerFunc {
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), ContextUser, user)
+		ctx := context.WithValue(r.Context(), UserKey, user)
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})

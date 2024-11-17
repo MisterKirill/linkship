@@ -7,16 +7,11 @@ import (
 	"linkship/backend/utils"
 	"log"
 	"net/http"
-	"strings"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
-func UserRegister(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		return
-	}
+func Register(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var body struct {
@@ -74,11 +69,7 @@ func UserRegister(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func UserLogin(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		return
-	}
+func Login(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	var body struct {
@@ -136,13 +127,9 @@ func UserLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetUser(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		w.WriteHeader(http.StatusMethodNotAllowed)
-		return
-	}
 	w.Header().Set("Content-Type", "application/json")
 
-	username := strings.TrimPrefix(r.URL.Path, "/users/")
+	username := r.PathValue("username")
 
 	errorMessage, err := utils.ValidateUsername(username)
 	if err != nil {

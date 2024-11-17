@@ -19,10 +19,19 @@ func main() {
 
 	database.ConnectDatabase()
 
-	http.HandleFunc("/users", middleware.CorsMiddleware(routes.UserRegister))
-	http.HandleFunc("/users/login", middleware.CorsMiddleware(routes.UserLogin))
-	http.HandleFunc("/users/", middleware.CorsMiddleware(routes.GetUser))
+	r := http.NewServeMux()
+
+	r.HandleFunc("POST /users", routes.Register)
+	r.HandleFunc("POST /users/login", routes.Login)
+	r.HandleFunc("GET /users/{username}", routes.GetUser)
+
+	server := http.Server{
+		Addr: os.Getenv("PORT"),
+		Handler: middleware.Logging(
+			middleware.Cors(r),
+		),
+	}
 
 	log.Println("Starting server...")
-	log.Fatal(http.ListenAndServe(os.Getenv("PORT"), nil))
+	log.Fatal(server.ListenAndServe())
 }

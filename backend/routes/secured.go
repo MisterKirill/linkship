@@ -8,6 +8,6 @@ import (
 )
 
 func SecuredRoute(w http.ResponseWriter, r *http.Request) {
-	user := r.Context().Value(middleware.ContextUser).(database.User)
+	user := r.Context().Value(middleware.UserKey).(database.User)
 	log.Print(user.Username)
 }
