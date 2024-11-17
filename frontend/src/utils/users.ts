@@ -4,7 +4,7 @@ export async function authenticate(
   isRegister: boolean = false
 ): Promise<boolean> {
   const res = await fetch(
-    isRegister ? 'http://localhost:8080/users' : 'http://localhost:8080/users/login',
+    isRegister ? `${import.meta.env.VITE_BACKEND_URL}/users` : `${import.meta.env.VITE_BACKEND_URL}/users/login`,
     {
       method: 'POST',
       headers: {
