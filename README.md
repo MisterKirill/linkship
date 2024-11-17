@@ -11,7 +11,7 @@ Linkship - open-source link & profile sharing service.
 
 You can launch your own instance of Linkship by following this guide:
 
-### Running Backend
+### Running backend
 
 1. Make sure you have **Docker** installed
 2. Go to the ```./backend```
