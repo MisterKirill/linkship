@@ -2,6 +2,7 @@ package main
 
 import (
 	"linkship/backend/database"
+	"linkship/backend/middleware"
 	"linkship/backend/routes"
 	"log"
 	"net/http"
@@ -18,9 +19,9 @@ func main() {
 
 	database.ConnectDatabase()
 
-	http.HandleFunc("/users", routes.UserRegister)
-	http.HandleFunc("/users/login", routes.UserLogin)
-	http.HandleFunc("/users/", routes.GetUser)
+	http.HandleFunc("/users", middleware.CorsMiddleware(routes.UserRegister))
+	http.HandleFunc("/users/login", middleware.CorsMiddleware(routes.UserLogin))
+	http.HandleFunc("/users/", middleware.CorsMiddleware(routes.GetUser))
 
 	log.Println("Starting server...")
 	log.Fatal(http.ListenAndServe(os.Getenv("PORT"), nil))
