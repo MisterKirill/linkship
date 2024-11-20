@@ -1,7 +1,7 @@
 export interface User {
   username: string
-  display_name: string | null
-  bio: string | null
+  display_name: string
+  bio: string
 }
 
 export async function authenticate(
