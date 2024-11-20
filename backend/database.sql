@@ -2,6 +2,6 @@ CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(40) UNIQUE NOT NULL,
     password VARCHAR NOT NULL,
-    display_name VARCHAR(40),
-    bio TEXT
+    display_name VARCHAR(40) DEFAULT '' NOT NULL,
+    bio VARCHAR(2000) DEFAULT '' NOT NULL
 );

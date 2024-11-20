@@ -1,3 +1,9 @@
+export interface User {
+  username: string
+  display_name: string | null
+  bio: string | null
+}
+
 export async function authenticate(
   username: string,
   password: string,
@@ -26,5 +32,17 @@ export async function authenticate(
   } else {
     alert(json.message)
     return false
+  }
+}
+
+export async function getUser(username: string): Promise<User | null> {
+  const res = await fetch(`${import.meta.env.VITE_BACKEND_URL}/users/${username}`)
+
+  const json = await res.json()
+
+  if (res.status == 200) {
+    return json
+  } else {
+    return null
   }
 }
