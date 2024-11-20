@@ -20,10 +20,7 @@ func main() {
 	database.ConnectDatabase()
 
 	r := http.NewServeMux()
-
-	r.HandleFunc("POST /users", routes.Register)
-	r.HandleFunc("POST /users/login", routes.Login)
-	r.HandleFunc("GET /users/{username}", routes.GetUser)
+	routes.RegisterRoutes(r)
 
 	server := http.Server{
 		Addr: os.Getenv("PORT"),
