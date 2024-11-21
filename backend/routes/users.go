@@ -147,7 +147,8 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var user database.User
-	err = database.DB.QueryRow("SELECT username, display_name, bio FROM users WHERE username = $1", username).Scan(
+	err = database.DB.QueryRow("SELECT id, username, display_name, bio FROM users WHERE username = $1", username).Scan(
+		&user.Id,
 		&user.Username,
 		&user.DisplayName,
 		&user.Bio,
@@ -157,5 +158,25 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	json.NewEncoder(w).Encode(user)
+	rows, err := database.DB.Query("SELECT id, name, url FROM links WHERE user_id = $1", user.Id)
+	if err != nil {
+		log.Println(err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	links := make([]database.ReadLink, 0)
+
+	for rows.Next() {
+		var link database.ReadLink
+		rows.Scan(&link.Id, &link.Name, &link.Url)
+		links = append(links, link)
+	}
+
+	json.NewEncoder(w).Encode(map[string]any{
+		"username":     user.Username,
+		"display_name": user.DisplayName,
+		"bio":          user.Bio,
+		"links":        links,
+	})
 }

@@ -48,7 +48,8 @@ func Authentication(next http.Handler) http.Handler {
 		}
 
 		var user database.User
-		err = database.DB.QueryRow("SELECT username, display_name, bio FROM users WHERE username = $1", sub).Scan(
+		err = database.DB.QueryRow("SELECT id, username, display_name, bio FROM users WHERE username = $1", sub).Scan(
+			&user.Id,
 			&user.Username,
 			&user.DisplayName,
 			&user.Bio,

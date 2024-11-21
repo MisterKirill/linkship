@@ -17,9 +17,8 @@ function ProfilePage() {
           if (user) {
             document.title = `${user.display_name || user.username} - Linkship`
           }
-
-          setIsLoading(false)
         })
+        .finally(() => setIsLoading(false))
     }
   }, [])
 

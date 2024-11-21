@@ -20,7 +20,7 @@ func ValidateUsername(username string) (string, error) {
 		return "Username is too long", nil
 	}
 
-	usernameValid, err := regexp.Match("^[a-zA-Z0-9_]+$", []byte(username))
+	usernameValid, err := regexp.Match(`^[a-zA-Z0-9_]+$`, []byte(username))
 	if err != nil {
 		return "", err
 	}
