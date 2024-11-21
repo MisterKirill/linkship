@@ -15,13 +15,24 @@
   display: flex;
   flex-direction: column;
   gap: 14px;
+  width: 380px;
 }
 
-.credit-link {
+.link-button {
+  color: white;
+  background-color: #1F2937;
+  text-decoration: none;
+  padding: 10px 0;
+}
+.link-button:hover {
+  background-color: #243141;
+}
+
+.powered-by {
   margin-top: 48px;
   color: #5D6B88;
   text-decoration: none;
 }
-.credit-link:hover {
+.powered-by:hover {
   text-decoration: underline;
 }
