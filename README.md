@@ -1,7 +1,7 @@
 <h1 align="center">Linkship - All your links in one place 🚀</h1>
 
 <p align="center">
-    <em>Open-source link & profile sharing service.</em>
+    <em>Open-source link & profile sharing service</em>
 </p>
 
 ## Self-hosting
