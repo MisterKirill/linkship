@@ -7,6 +7,11 @@ export interface User {
   links: Link[]
 }
 
+export interface UpdatableUserInfo {
+  display_name: string
+  bio: string
+}
+
 export async function authenticate(
   username: string,
   password: string,
@@ -48,4 +53,20 @@ export async function getUser(username: string): Promise<User | null> {
   } else {
     return null
   }
+}
+
+export async function updateUser(userInfo: UpdatableUserInfo) {
+  const token = localStorage.getItem('token')
+  if (!token) {
+    return
+  }
+
+  await fetch(`${import.meta.env.VITE_BACKEND_URL}/user`, {
+    method: 'PATCH',
+    headers: {
+      'Authorization': token,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(userInfo)
+  })
 }

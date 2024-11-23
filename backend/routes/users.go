@@ -4,9 +4,11 @@ import (
 	"database/sql"
 	"encoding/json"
 	"linkship/backend/database"
+	"linkship/backend/middleware"
 	"linkship/backend/utils"
 	"log"
 	"net/http"
+	"unicode/utf8"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -179,4 +181,53 @@ func GetUser(w http.ResponseWriter, r *http.Request) {
 		"bio":          user.Bio,
 		"links":        links,
 	})
+}
+
+func UpdateUser(w http.ResponseWriter, r *http.Request) {
+	user := r.Context().Value(middleware.UserKey).(database.User)
+
+	var body struct {
+		DisplayName string `json:"display_name"`
+		Bio         string
+	}
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	updatedUser := database.ReadUser{
+		DisplayName: user.DisplayName,
+		Bio:         user.Bio,
+	}
+
+	if body.DisplayName != "" {
+		if utf8.RuneCountInString(body.DisplayName) > 40 {
+			w.WriteHeader(http.StatusUnprocessableEntity)
+			json.NewEncoder(w).Encode(map[string]any{
+				"error_message": "Display name is too long",
+			})
+			return
+		}
+
+		updatedUser.DisplayName = body.DisplayName
+	}
+
+	if body.Bio != "" {
+		if utf8.RuneCountInString(body.Bio) > 2000 {
+			w.WriteHeader(http.StatusUnprocessableEntity)
+			json.NewEncoder(w).Encode(map[string]any{
+				"error_message": "Bio is too long",
+			})
+			return
+		}
+
+		updatedUser.Bio = body.Bio
+	}
+
+	database.DB.Query(
+		"UPDATE users SET display_name = $1, bio = $2 WHERE id = $3",
+		updatedUser.DisplayName,
+		updatedUser.Bio,
+		user.Id,
+	)
 }

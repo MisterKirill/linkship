@@ -16,10 +16,14 @@ type AuthenticationUser struct {
 	Password string `json:"password"`
 }
 
-type ReadLink struct {
-	Id   int    `json:"id"`
+type CreateLink struct {
 	Name string `json:"name"`
 	Url  string `json:"url"`
+}
+
+type ReadLink struct {
+	CreateLink
+	Id int `json:"id"`
 }
 
 type Link struct {
