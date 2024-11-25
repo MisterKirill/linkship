@@ -6,3 +6,12 @@
   gap: 28px;
   height: 100vh;
 }
+
+.powered-by {
+  margin-top: 48px;
+  color: #5D6B88;
+  text-decoration: none;
+}
+.powered-by:hover {
+  text-decoration: underline;
+}

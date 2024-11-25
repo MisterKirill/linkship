@@ -27,12 +27,3 @@
 .link-button:hover {
   background-color: #243141;
 }
-
-.powered-by {
-  margin-top: 48px;
-  color: #5D6B88;
-  text-decoration: none;
-}
-.powered-by:hover {
-  text-decoration: underline;
-}

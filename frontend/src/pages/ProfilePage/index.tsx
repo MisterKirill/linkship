@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { getUser, User } from '../../utils/users'
 import './style.css'
 
 function ProfilePage() {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState<boolean>(true)
+  const [isFailed, setIsFailed] = useState<boolean>(false)
   const { username } = useParams()
 
   useEffect(() => {
@@ -17,9 +18,9 @@ function ProfilePage() {
           if (user) {
             document.title = `${user.display_name || user.username} - Linkship`
           }
-
-          setIsLoading(false)
         })
+        .catch(() => setIsFailed(true))
+        .finally(() => setIsLoading(false))
     }
   }, [])
 
@@ -29,14 +30,22 @@ function ProfilePage() {
     )
   }
 
+  if (isFailed) {
+    return (
+      <>
+        <h1>Oops!</h1>
+
+        <p>Failed to get user! Please try again in a few minutes.</p>
+      </>
+    )
+  }
+
   if (!user) {
     return (
       <>
         <h1>Oops!</h1>
 
         <p>Looks like user <b>{username}</b> does not exist.</p>
-
-        <Link to="/" className="credit-link">Powered by <b>Linkship</b></Link>
       </>
     )
   }
@@ -64,9 +73,6 @@ function ProfilePage() {
       ) : (
         <span className="text-muted">Looks like <b>{user.username}</b> hasn't added links yet!</span>
       )}
-
-
-      <Link to="/" className="powered-by">Powered by <b>Linkship</b></Link>
     </>
   )
 }
