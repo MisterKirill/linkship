@@ -1,12 +1,8 @@
 body {
-  font-family: "Fira Mono", serif;
+  font-family: "Montserrat", serif;
   background-color: #111827;
   color: white;
   margin: 0;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 500;
 }
 
 .text-link {
@@ -25,16 +21,20 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .text-field {
-  font-family: "Fira Mono", serif;
-  font-size: 16px;
-  padding: 12px 16px;
+  font-family: "Montserrat", serif;
+  font-size: 20px;
+  font-weight: 500;
+  padding: 16px 22px;
   border: none;
-  background-color: #1F2937;
+  border-radius: 12px;
+  background-color: #1E2940;
   color: white;
 }
+.text-field::placeholder {
+  color: #8DA2BF;
+}
 .text-field:focus {
-  background-color: #243141;
-  outline: 1px solid #6EE7B7;
+  outline: 2px solid #8DA2BF;
 }
 
 .text-muted {
@@ -42,16 +42,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .button {
-  font-family: "Fira Mono", serif;
-  font-size: 16px;
-  padding: 12px 16px;
-  background-color: #1F2937;
-  color: white;
+  font-family: "Montserrat", serif;
+  font-size: 20px;
+  font-weight: 600;
+  padding: 16px 20px;
   border: none;
+  border-radius: 12px;
   cursor: pointer;
+  background-color: #1E2940;
+  color: white;
 }
 .button:hover {
-  background-color: #243141;
+  background-color: #25314b;
 }
 
 .loader {
