@@ -1,77 +1,15 @@
 body {
-  font-family: "Montserrat", serif;
+  font-family: 'Montserrat', serif;
   background-color: #111827;
   color: white;
   margin: 0;
 }
 
-.text-link {
-  color: #6EE7B7;
+.link {
   text-decoration: none;
-}
-.text-link:hover {
-  text-decoration: underline;
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  width: 400px;
-  gap: 12px;
-}
-
-.text-field {
-  font-family: "Montserrat", serif;
-  font-size: 20px;
-  font-weight: 500;
-  padding: 16px 22px;
-  border: none;
-  border-radius: 12px;
-  background-color: #1E2940;
-  color: white;
-}
-.text-field::placeholder {
-  color: #8DA2BF;
-}
-.text-field:focus {
-  outline: 2px solid #8DA2BF;
-}
-
-.text-muted {
-  color: #5D6B88;
-}
-
-.button {
-  font-family: "Montserrat", serif;
-  font-size: 20px;
   font-weight: 600;
-  padding: 16px 20px;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  background-color: #1E2940;
-  color: white;
+  color: #6EE7B7;
 }
-.button:hover {
-  background-color: #25314b;
-}
-
-.loader {
-  background-color: #6EE7B7;
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  animation: loader 1s ease-out infinite;
-}
-
-@keyframes loader {
-  0% {
-    opacity: 1;
-    transform: scale(0);
-  }
-
-  100% {
-    opacity: 0;
-    transform: scale(1);
-  }
+.link:hover {
+  text-decoration: underline;
 }
