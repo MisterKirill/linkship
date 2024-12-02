@@ -40,6 +40,14 @@
   color: #6EE7B7;
 }
 
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+  margin: 40px;
+}
+
 .footer {
   display: flex;
   align-items: center;
