@@ -6,6 +6,7 @@ function NotFound() {
       <h1>404</h1>
       
       <p>This page was not found.</p>
+      
       <p>
         You can go <Link to="/" className="link">home</Link> or <a href="https://github.com/MisterKirill/linkship/issues" className="link">create an issue</a> on GitHub if you think that something went wrong.
       </p>

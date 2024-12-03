@@ -22,22 +22,18 @@
   color: #59be96;
 }
 
-.links {
+.navLinks {
   display: flex;
   gap: 18px;
 }
 
-.nav-link {
+.navLink {
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 500;
   color: white;
 }
-.nav-link:hover {
+.navLink:hover {
   text-decoration: underline;
-}
-
-.nav-link-active {
-  color: #6EE7B7;
 }
 
 .main {

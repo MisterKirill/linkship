@@ -1,25 +1,25 @@
-import { Link, Outlet } from 'react-router-dom'
-import './style.css'
+import { Link, NavLink, Outlet } from 'react-router-dom'
+import classes from './style.module.css'
 
 function DefaultLayout() {
   return (
-    <div className="wrapper">
-      <nav className="nav">
-        <Link to="/" className="logo">
+    <div className={classes.wrapper}>
+      <nav className={classes.nav}>
+        <Link to="/" className={classes.logo}>
           Linkship
         </Link>
 
-        <div className="links">
-          <Link to="/register" className="nav-link">Register</Link>
-          <Link to="/login" className="nav-link">Log In</Link>
+        <div className={classes.navLinks}>
+          <NavLink to="/register" className={classes.navLink}>Register</NavLink>
+          <NavLink to="/login" className={classes.navLink}>Log In</NavLink>
         </div>
       </nav>
 
-      <main className="main">
+      <main className={classes.main}>
         <Outlet />
       </main>
 
-      <footer className="footer">
+      <footer className={classes.footer}>
         <span>
           Made with ❤️ by <a href="https://github.com/MisterKirill" className="link">Mister Kirill</a>.<br />
           Source code can be found on <a href="https://github.com/MisterKirill/linkship" className="link">GitHub</a>.
