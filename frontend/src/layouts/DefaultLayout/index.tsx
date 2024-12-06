@@ -10,8 +10,12 @@ function DefaultLayout() {
         </Link>
 
         <div className={classes.navLinks}>
-          <NavLink to="/register" className={classes.navLink}>Register</NavLink>
-          <NavLink to="/login" className={classes.navLink}>Log In</NavLink>
+          <NavLink to="/register" className={({ isActive }) => isActive ? classes.navLinkActive : classes.navLink}>
+            Создать аккаунт
+          </NavLink>
+          <NavLink to="/login" className={({ isActive }) => isActive ? classes.navLinkActive : classes.navLink}>
+            Войти
+          </NavLink>
         </div>
       </nav>
 

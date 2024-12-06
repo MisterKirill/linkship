@@ -19,7 +19,7 @@
   font-size: 24px;
 }
 .logo:hover {
-  color: #59be96;
+  color: #59BE96;
 }
 
 .navLinks {
@@ -33,6 +33,15 @@
   color: white;
 }
 .navLink:hover {
+  text-decoration: underline;
+}
+
+.navLinkActive {
+  text-decoration: none;
+  font-weight: 500;
+  color: #6EE7B7;
+}
+.navLinkActive:hover {
   text-decoration: underline;
 }
 

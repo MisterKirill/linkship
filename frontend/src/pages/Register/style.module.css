@@ -1,0 +1,12 @@
+.wrapper {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  justify-content: center;
+}
+
+@media screen and (max-width: 880px) {
+  .wrapper {
+    flex-direction: column;
+  }
+}
