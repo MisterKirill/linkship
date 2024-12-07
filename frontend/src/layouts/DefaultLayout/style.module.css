@@ -62,3 +62,30 @@
   background-color: #1E2940;
   height: 130px;
 }
+
+.footerContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 42px;
+  max-width: 1000px;
+  width: 100%;
+}
+
+.copyright {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.socials {
+  display: flex;
+  gap: 24px;
+}
+
+.socialLink {
+  color: white;
+  transition: 0.3s transform;
+}
+.socialLink:hover {
+  transform: scale(1.1);
+}

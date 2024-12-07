@@ -10,8 +10,8 @@ function Login() {
       </div>
 
       <form className="form">
-        <input type="text" placeholder="Имя пользователя" className="input" />
-        <input type="password" placeholder="Пароль" className="input" />
+        <input type="text" placeholder="Имя пользователя" className="input" required />
+        <input type="password" placeholder="Пароль" className="input" required />
         <button type="submit" className="btn">
           Войти
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
