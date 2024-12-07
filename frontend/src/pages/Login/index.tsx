@@ -1,7 +1,15 @@
+import { FormEvent, useState } from "react"
 import { Link } from "react-router-dom"
 import classes from "./style.module.css"
 
 function Login() {
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+
+  const onSubmit = (event: FormEvent) => {
+    event.preventDefault()
+  }
+  
   return (
     <div className={classes.wrapper}>
       <div>
@@ -9,9 +17,19 @@ function Login() {
         <span>Ещё нет аккаунта? <Link to="/register" className="link">Создать аккаунт</Link>.</span>
       </div>
 
-      <form className="form">
-        <input type="text" placeholder="Имя пользователя" className="input" required />
-        <input type="password" placeholder="Пароль" className="input" required />
+      <form className="form" onSubmit={onSubmit}>
+        <input
+          type="text"
+          placeholder="Имя пользователя"
+          className="input"
+          onChange={(e) => setUsername(e.target.value)}
+          required />
+        <input
+          type="password"
+          placeholder="Пароль"
+          className="input"
+          onChange={(e) => setPassword(e.target.value)}
+          required />
         <button type="submit" className="btn">
           Войти
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">

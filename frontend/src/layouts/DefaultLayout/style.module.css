@@ -8,18 +8,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #1E2940;
+  background-color: var(--bg-accent);
   padding: 16px 42px;
 }
 
 .logo {
   text-decoration: none;
-  color: #6EE7B7;
+  color: var(--brand);
   font-weight: bold;
   font-size: 24px;
 }
 .logo:hover {
-  color: #59BE96;
+  color: var(--brand-accent);
 }
 
 .navLinks {
@@ -30,7 +30,7 @@
 .navLink {
   text-decoration: none;
   font-weight: 500;
-  color: white;
+  color: var(--text);
 }
 .navLink:hover {
   text-decoration: underline;
@@ -39,7 +39,7 @@
 .navLinkActive {
   text-decoration: none;
   font-weight: 500;
-  color: #6EE7B7;
+  color: var(--brand);
 }
 .navLinkActive:hover {
   text-decoration: underline;
@@ -59,7 +59,7 @@
   justify-content: center;
   margin-top: auto;
   text-align: center;
-  background-color: #1E2940;
+  background-color: var(--bg-accent);
   height: 130px;
 }
 
@@ -83,9 +83,9 @@
 }
 
 .socialLink {
-  color: white;
+  color: var(--text);
   transition: 0.3s transform;
 }
 .socialLink:hover {
-  transform: scale(1.1);
+  transform: scale(1.2);
 }
