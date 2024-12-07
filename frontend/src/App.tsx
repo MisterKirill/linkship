@@ -1,9 +1,9 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import DefaultLayout from './layouts/DefaultLayout'
-import Home from './pages/Home'
-import NotFound from './pages/NotFound'
-import Login from './pages/Login'
-import Register from './pages/Register'
+import { BrowserRouter, Route, Routes } from "react-router-dom"
+import DefaultLayout from "./layouts/DefaultLayout"
+import Home from "./pages/Home"
+import NotFound from "./pages/NotFound"
+import Login from "./pages/Login"
+import Register from "./pages/Register"
 
 function App() {
   return (

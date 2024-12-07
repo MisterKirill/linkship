@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom'
-import classes from './style.module.css'
+import { Link } from "react-router-dom"
+import classes from "./style.module.css"
 
 function Register() {
   return (

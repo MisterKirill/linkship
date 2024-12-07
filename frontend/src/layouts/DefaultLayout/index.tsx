@@ -1,5 +1,5 @@
-import { Link, NavLink, Outlet } from 'react-router-dom'
-import classes from './style.module.css'
+import { Link, NavLink, Outlet } from "react-router-dom"
+import classes from "./style.module.css"
 
 function DefaultLayout() {
   return (
