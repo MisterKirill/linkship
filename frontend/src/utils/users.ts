@@ -1,0 +1,25 @@
+interface Credentials {
+  username: string
+  password: string
+}
+
+export async function authenticate(credentials: Credentials, isRegister: boolean = false): Promise<boolean> {
+  const res = await fetch(import.meta.env.VITE_BACKEND_URL + (isRegister ? '/users' : '/login'), {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(credentials)
+  })
+
+  if (res.status != 200) {
+    return false
+  }
+
+  const json = await res.json()
+
+  localStorage.setItem('token', json.token)
+  localStorage.setItem('username', credentials.username)
+
+  return true
+}
