@@ -13,8 +13,6 @@ function Login() {
 
     if (await authenticate({ username, password })) {
       navigate("/")
-    } else {
-      alert("Failed to log in!")
     }
   }
   

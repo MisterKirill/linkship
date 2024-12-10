@@ -13,8 +13,6 @@ function Register() {
 
     if (await authenticate({ username, password }, true)) {
       navigate("/")
-    } else {
-      alert("Failed to register!")
     }
   }
 

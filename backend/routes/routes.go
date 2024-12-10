@@ -7,7 +7,7 @@ import (
 
 func RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("POST /users", Register)
-	mux.HandleFunc("POST /users/login", Login)
+	mux.HandleFunc("POST /login", Login)
 	mux.HandleFunc("GET /users/{username}", GetUser)
 	mux.Handle("PATCH /user", middleware.Authentication(http.HandlerFunc(UpdateUser)))
 

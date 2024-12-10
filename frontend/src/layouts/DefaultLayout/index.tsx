@@ -1,7 +1,16 @@
+import { useEffect, useState } from "react"
 import { Link, NavLink, Outlet } from "react-router-dom"
 import classes from "./style.module.css"
 
 function DefaultLayout() {
+  const [username, setUsername] = useState<string | null>(null)
+
+  useEffect(() => {
+    const username = localStorage.getItem('username')
+
+    setUsername(username)
+  }, [])
+
   return (
     <div className={classes.wrapper}>
       <nav className={classes.nav}>
@@ -9,14 +18,22 @@ function DefaultLayout() {
           Linkship
         </Link>
 
-        <div className={classes.navLinks}>
-          <NavLink to="/register" className={({ isActive }) => isActive ? classes.navLinkActive : classes.navLink}>
-            Создать аккаунт
-          </NavLink>
-          <NavLink to="/login" className={({ isActive }) => isActive ? classes.navLinkActive : classes.navLink}>
-            Войти
-          </NavLink>
-        </div>
+        {username ? (
+          <div className={classes.navLinks}>
+            <NavLink to={`/${username}`} className={({ isActive }) => isActive ? classes.navLinkActive : classes.navLink}>
+              {username}
+            </NavLink>
+          </div>
+        ) : (
+          <div className={classes.navLinks}>
+            <NavLink to="/register" className={({ isActive }) => isActive ? classes.navLinkActive : classes.navLink}>
+              Создать аккаунт
+            </NavLink>
+            <NavLink to="/login" className={({ isActive }) => isActive ? classes.navLinkActive : classes.navLink}>
+              Войти
+            </NavLink>
+          </div>
+        )}
       </nav>
 
       <main className={classes.main}>
