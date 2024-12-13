@@ -5,9 +5,9 @@ function NotFound() {
     <>
       <h1>404</h1>
       
-      <span>Страница не найдена</span>
+      <span>This page was not found</span>
 
-      <Link to="/" className="link">Вернуться домой</Link>
+      <Link to="/" className="text-link">Return home</Link>
     </>
   )
 }

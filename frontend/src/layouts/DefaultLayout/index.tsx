@@ -27,10 +27,10 @@ function DefaultLayout() {
         ) : (
           <div className={classes.navLinks}>
             <NavLink to="/register" className={({ isActive }) => isActive ? classes.navLinkActive : classes.navLink}>
-              Создать аккаунт
+              Register
             </NavLink>
             <NavLink to="/login" className={({ isActive }) => isActive ? classes.navLinkActive : classes.navLink}>
-              Войти
+              Log In
             </NavLink>
           </div>
         )}
@@ -42,7 +42,10 @@ function DefaultLayout() {
 
       <footer className={classes.footer}>
         <div className={classes.footerContent}>
-          <span className={classes.copyright}>&copy; 2024 Linkship</span>
+          <div className={classes.copyright}>
+            <span>&copy; 2024 Linkship</span>
+            <span>Made with ❤️ by <a href="https://github.com/MisterKirill" className="text-link">Mister Kirill</a></span>
+          </div>
 
           <div className={classes.socials}>
             <a href="https://github.com/MisterKirill/linkship" className={classes.socialLink}>

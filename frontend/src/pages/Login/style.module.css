@@ -1,8 +1,14 @@
 .wrapper {
   display: flex;
-  gap: 40px;
   align-items: center;
   justify-content: center;
+  gap: 40px;
+  max-width: 1140px;
+  width: 100%;
+}
+
+.heading {
+  margin-bottom: 20px;
 }
 
 @media screen and (max-width: 880px) {
