@@ -189,6 +189,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	var body struct {
 		DisplayName string `json:"display_name"`
 		Bio         string
+		Color       string
 	}
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -224,10 +225,23 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 		updatedUser.Bio = body.Bio
 	}
 
+	if body.Color != "" {
+		if utf8.RuneCountInString(body.Color) > 7 {
+			w.WriteHeader(http.StatusUnprocessableEntity)
+			json.NewEncoder(w).Encode(map[string]any{
+				"error_message": "Color is too long",
+			})
+			return
+		}
+
+		updatedUser.Color = body.Color
+	}
+
 	database.DB.Query(
-		"UPDATE users SET display_name = $1, bio = $2 WHERE id = $3",
+		"UPDATE users SET display_name = $1, bio = $2, color = $3 WHERE id = $4",
 		updatedUser.DisplayName,
 		updatedUser.Bio,
+		updatedUser.Color,
 		user.Id,
 	)
 }

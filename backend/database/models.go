@@ -1,9 +1,15 @@
 package database
 
+type AuthenticationUser struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
 type ReadUser struct {
 	Username    string `json:"username"`
 	DisplayName string `json:"display_name"`
 	Bio         string `json:"bio"`
+	Color       string `json:"color"`
 }
 
 type User struct {
@@ -11,14 +17,10 @@ type User struct {
 	Id int `json:"id"`
 }
 
-type AuthenticationUser struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
-
 type CreateLink struct {
-	Name string `json:"name"`
-	Url  string `json:"url"`
+	Name  string `json:"name"`
+	Url   string `json:"url"`
+	Color string `json:"color"`
 }
 
 type ReadLink struct {

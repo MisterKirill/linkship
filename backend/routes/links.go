@@ -13,8 +13,9 @@ func CreateLink(w http.ResponseWriter, r *http.Request) {
 	user := r.Context().Value(middleware.UserKey).(database.User)
 
 	var body struct {
-		Name string
-		Url  string
+		Name  string
+		Url   string
+		Color string
 	}
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 		w.WriteHeader(http.StatusBadRequest)
@@ -37,11 +38,20 @@ func CreateLink(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if utf8.RuneCountInString(body.Color) > 7 {
+		w.WriteHeader(http.StatusUnprocessableEntity)
+		json.NewEncoder(w).Encode(map[string]any{
+			"message": "Color is too long",
+		})
+		return
+	}
+
 	database.DB.Query(
-		"INSERT INTO links (user_id, name, url) VALUES ($1, $2, $3)",
+		"INSERT INTO links (user_id, name, url, color) VALUES ($1, $2, $3, $4)",
 		user.Id,
 		body.Name,
 		body.Url,
+		body.Color,
 	)
 }
 
